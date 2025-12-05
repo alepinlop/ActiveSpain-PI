@@ -1,0 +1,80 @@
+<!-- src/app/componentes/ofertas/ofertas-actualizar/ofertas-actualizar.component.html -->
+<div class="modal-backdrop">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3>Editar oferta</h3>
+      <button class="close-btn" (click)="close()" aria-label="Cerrar">&times;</button>
+    </div>
+
+    @if (error) { <div class="error">{{ error }}</div> }
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="grid cols-2">
+        <label>Título *
+          <input type="text" formControlName="titulo">
+        </label>
+
+        <label>Tipo *
+          <input type="text" formControlName="actividad_tipo">
+        </label>
+
+        <label>Lugar (ciudad / dirección) *
+          <input type="text" formControlName="lugar_ciudad">
+        </label>
+
+        <label>Fecha y hora *
+          <input type="datetime-local" formControlName="fechahora_inicio">
+        </label>
+
+        <label>Tarifa (€)
+          <input type="number" formControlName="tarifa" min="0" step="0.01">
+        </label>
+
+        <label>Preparación física
+          <select formControlName="preparacion_fisica">
+            @for (p of preparacionOpciones; track p) { <option [value]="p">{{ p }}</option> }
+          </select>
+        </label>
+
+        <label>Duración (horas)
+          <input type="number" formControlName="duracion_horas" min="1">
+        </label>
+
+        <label>
+          <input type="checkbox" formControlName="material_necesario"> Material necesario
+        </label>
+
+        <label>Material ofertado
+          <input type="text" formControlName="material_ofertado">
+        </label>
+
+        <label>Plazas mín.
+          <input type="number" formControlName="plazas_min" min="1">
+        </label>
+
+        <label>Plazas máx.
+          <input type="number" formControlName="plazas_max" min="1">
+        </label>
+
+        <label>
+          <input type="checkbox" formControlName="transport_incluido"> Transporte incluido
+        </label>
+
+        <label>Estado
+          <select formControlName="estado">
+            @for (e of estadoOpciones; track e) { <option [value]="e">{{ e }}</option> }
+          </select>
+        </label>
+      </div>
+
+      <label class="full">Descripción
+        <textarea formControlName="descripcion" rows="4"></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="submit" [disabled]="loading">Guardar cambios</button>
+        <button type="button" (click)="close()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

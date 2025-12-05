@@ -1,0 +1,32 @@
+<!-- peticiones-borrar.component.html -->
+<div class="card-borrar" role="dialog" aria-modal="true" aria-labelledby="borrar-title">
+  <h3 id="borrar-title" class="borrar-title">Confirmar borrado</h3>
+
+  <p class="borrar-text">
+    ¿Seguro que quieres borrar la petición <strong>#{{ id }}</strong>?
+  </p>
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  <div class="actions">
+    <button
+      type="button"
+      class="btn-confirm"
+      (click)="confirmar()"
+      [disabled]="loading"
+    >
+      Sí, borrar
+    </button>
+
+    <button
+      type="button"
+      class="btn-cancel"
+      (click)="cancel.emit()"
+      [disabled]="loading"
+    >
+      Cancelar
+    </button>
+  </div>
+</div>

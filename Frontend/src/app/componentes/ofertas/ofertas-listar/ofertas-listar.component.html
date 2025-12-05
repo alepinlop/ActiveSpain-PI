@@ -1,0 +1,151 @@
+<div class="ofertas-wrap">
+  <div class="header">
+    <div>
+      <h2>Ofertas de Actividades</h2>
+      <p class="sub">Gestiona y publica tus actividades; aquí verás las ofertas publicadas.</p>
+    </div>
+
+    @if (currentUser && currentUser.rol === 'ofertante') {
+      <div class="actions">
+        <button class="btn-crear" type="button" (click)="mostrarCrear = !mostrarCrear">
+          {{ mostrarCrear ? 'Cancelar' : 'Crear oferta' }}
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (mostrarCrear) {
+    <app-ofertas-crear (created)="onCreated()" (cancel)="mostrarCrear=false"></app-ofertas-crear>
+  }
+
+  @if (cargando) { <div class="info">Cargando ofertas...</div> }
+  @if (error) { <div class="error">{{ error }}</div> }
+
+  @if (!cargando && ofertas.length > 0) {
+    <div class="ofertas-grid">
+      @for (o of ofertas; track o.id) {
+        <article class="oferta-card">
+          <header class="card-top">
+            <div class="card-titulo">
+              <h3 class="titulo">{{ o.titulo }}</h3>
+              <span class="badge tipo">{{ o.actividad_tipo || '-' }}</span>
+            </div>
+            <div class="meta-right">
+              <div class="meta-line"><strong>ID:</strong> {{ o.id }}</div>
+              <div class="meta-line"><strong>Estado:</strong> <span class="estado">{{ o.estado || '—' }}</span></div>
+            </div>
+          </header>
+
+          <section class="card-body">
+            <p class="descripcion">{{ o.descripcion || '-' }}</p>
+
+            <div class="grid-info">
+              <div class="info-row">
+                <strong>Ofertante:</strong>
+                <span>{{ ofertanteNombre(o) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Lugar:</strong>
+                <span>{{ o.lugar_ciudad || '-' }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Inicio:</strong>
+                <span>{{ formatFecha(o.fechahora_inicio) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Tarifa:</strong>
+                <span>{{ o.tarifa !== undefined && o.tarifa !== null ? (o.tarifa + ' €') : '-' }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Preparación:</strong>
+                <span>{{ o.preparacion_fisica || '-' }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Duración:</strong>
+                <span>{{ formatDuracion(o.duracion_horas) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Material necesario:</strong>
+                <span>{{ boolToSiNo(o.material_necesario) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Material ofertado:</strong>
+                <span>{{ o.material_ofertado || '-' }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Plazas:</strong>
+                <span>{{ o.plazas_min }} - {{ o.plazas_max }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Transporte incluido:</strong>
+                <span>{{ boolToSiNo(o.transport_incluido) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Creado:</strong>
+                <span>{{ formatFecha(o.created_at) }}</span>
+              </div>
+
+              <div class="info-row">
+                <strong>Última mod.:</strong>
+                <span>{{ formatFecha(o.updated_at) }}</span>
+              </div>
+            </div>
+          </section>
+
+          <footer class="card-actions">
+            <div class="contact-info">
+              <span class="small"><strong>Usuario:</strong> {{ ofertanteNombre(o) }}</span>
+            </div>
+
+            <div class="accion-botones">
+              @if (isOwner(o)) {
+                <button class="btn-editar" (click)="startEdit(o)">Editar</button>
+                <button class="btn-borrar" (click)="startDelete(o.id)">Borrar</button>
+              } @else {
+                <span class="not-owner">—</span>
+              }
+            </div>
+          </footer>
+
+          <!-- Borrado INLINE: se renderiza justo debajo de la tarjeta correspondiente -->
+          @if (deletingId === o.id) {
+            <div class="inline-delete">
+              <app-ofertas-borrar
+                [id]="o.id"
+                (deleted)="onDeleted()"
+                (cancel)="deletingId = null">
+              </app-ofertas-borrar>
+            </div>
+          }
+
+        </article>
+      }
+    </div>
+
+    <!-- EDIT modal (si quieres mantener la edición como modal global lo dejamos así) -->
+    @if (editing) {
+      <div class="modal-backdrop">
+        <div class="modal-window">
+          <app-ofertas-actualizar
+            [oferta]="editing"
+            (updated)="onUpdated()"
+            (cancel)="editing = null">
+          </app-ofertas-actualizar>
+        </div>
+      </div>
+    }
+
+  } @else {
+    @if (!cargando) { <div class="info">No hay ofertas.</div> }
+  }
+</div>

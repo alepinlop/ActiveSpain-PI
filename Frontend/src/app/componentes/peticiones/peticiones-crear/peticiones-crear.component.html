@@ -1,0 +1,67 @@
+<!-- src/app/componentes/peticiones/peticiones-crear/peticiones-crear.component.html -->
+<div class="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal-window">
+    <div class="card form-card">
+      <h3>{{ loading ? 'Publicando...' : 'Nueva petición' }}</h3>
+
+      @if (error) { <div class="error">{{ error }}</div> }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>Título
+          <input type="text" formControlName="titulo" placeholder="Título de la petición">
+        </label>
+
+        <label>Descripción
+          <textarea formControlName="descripcion" rows="3" placeholder="Describe lo que buscas"></textarea>
+        </label>
+
+        <label>Tipo
+          <input type="text" formControlName="actividad_tipo" placeholder="Senderismo, Aventura...">
+        </label>
+
+        <label>Lugar (ciudad / dirección)
+          <input type="text" formControlName="lugar_ciudad" placeholder="Ciudad, provincia o dirección">
+        </label>
+
+        <label>Fecha y hora deseada
+          <input type="datetime-local" formControlName="fechahora_deseada">
+        </label>
+
+        <label>Duración (horas)
+          <input type="number" formControlName="duracion_horas" min="1">
+        </label>
+
+        <label>Necesidades concretas
+          <textarea formControlName="necesidades_concretas" rows="2" placeholder="Necesidades (p.ej. silla, acceso, niños...)"></textarea>
+        </label>
+
+        <div class="grid-2">
+          <label>Presupuesto mínimo (€)
+            <input type="number" formControlName="presupuesto_min" step="0.01" min="0">
+          </label>
+
+          <label>Presupuesto máximo (€)
+            <input type="number" formControlName="presupuesto_max" step="0.01" min="0">
+          </label>
+        </div>
+
+        <label>Teléfono contacto
+          <input type="tel" formControlName="contacto_telefono" placeholder="666 123 456">
+        </label>
+
+        <label>Estado
+          <select formControlName="estado">
+            <option value="activa">activa</option>
+            <option value="atendida">atendida</option>
+            <option value="cancelada">cancelada</option>
+          </select>
+        </label>
+
+        <div class="actions">
+          <button type="submit" [disabled]="loading">Publicar petición</button>
+          <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

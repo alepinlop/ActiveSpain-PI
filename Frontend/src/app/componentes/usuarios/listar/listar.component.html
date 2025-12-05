@@ -1,0 +1,130 @@
+<div class="usuarios-wrap">
+  <div class="usuarios-header">
+    <div>
+      <h2>Directorio de Usuarios</h2>
+      <p class="sub">Lista completa de ofertantes y consumidores registrados en la plataforma</p>
+    </div>
+  </div>
+
+  <!-- estadística simple -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-left">
+        <div class="stat-ico ico-large">
+          <span class="emoji">👥</span>
+        </div>
+        <div>
+          <p class="muted">Total Usuarios</p>
+          <p class="stat-num">{{ usuarios.length }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- tarjetas de espacio reservadas (se pueden rellenar desde TS si quieres) -->
+    <div class="stat-card">
+      <div class="stat-left">
+        <div class="stat-ico ico-red">
+          <span class="emoji">🏷️</span>
+        </div>
+        <div>
+          <p class="muted">Ofertantes</p>
+          <p class="stat-num">—</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-left">
+        <div class="stat-ico ico-albero">
+          <span class="emoji">🧭</span>
+        </div>
+        <div>
+          <p class="muted">Consumidores</p>
+          <p class="stat-num">—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- (Filtro/búsqueda eliminado por petición) -->
+
+  <div class="tabla-wrap">
+    @if (cargando) { <div class="info">Cargando usuarios...</div> }
+    @if (error) { <div class="error">{{ error }}</div> }
+
+    @if (!cargando && usuarios.length === 0) {
+      <div class="empty">No se encontraron usuarios.</div>
+    } @else {
+      <div class="table-responsive">
+        <table class="usuarios-table" role="table" aria-label="Listado de usuarios">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Ciudad</th>
+              <th>Teléfono</th>
+              <th>Activo</th>
+              <th>Ofertas</th>
+              <th>Peticiones</th>
+              <th>Creado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (u of usuarios; track u.id) {
+              <tr class="usuario-row">
+                <td class="cell id">{{ u.id }}</td>
+
+                <td class="cell name">
+                  <div class="name-cell">
+                    <div class="avatar" attr.data-role="{{ u.rol }}">
+                      {{ (u.nombre ? (u.nombre.charAt(0) || '?') : '?') + (u.apellidos ? (u.apellidos.charAt(0) || '') : '') }}
+                    </div>
+                    <div>
+                      <div class="nombre-text">{{ u.nombre || '-' }}</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="cell apellidos">{{ u.apellidos || '-' }}</td>
+
+                <td class="cell email">
+                  <a href="mailto:{{ u.email }}" class="link-email">{{ u.email || '-' }}</a>
+                </td>
+
+                <td class="cell rol">
+                  <span class="tag" [ngClass]="{'tag-ofertante': u.rol === 'ofertante', 'tag-consumidor': u.rol === 'consumidor'}">
+                    {{ u.rol || '-' }}
+                  </span>
+                </td>
+
+                <td class="cell ciudad">{{ u.ciudad || '-' }}</td>
+
+                <td class="cell telefono">
+                  <a href="tel:{{ u.telefono }}" class="link-phone">{{ u.telefono || '-' }}</a>
+                </td>
+
+                <td class="cell activo">{{ u.esta_activo ? 'Sí' : 'No' }}</td>
+
+                <td class="cell num text-center">
+                  {{ u.num_ofertas || 0 }}
+                </td>
+
+                <td class="cell num text-center">
+                  {{ u.num_peticiones || 0 }}
+                </td>
+
+                <td class="cell creado">
+                  {{ u.created_at ? (u.created_at | date:'short') : '-' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

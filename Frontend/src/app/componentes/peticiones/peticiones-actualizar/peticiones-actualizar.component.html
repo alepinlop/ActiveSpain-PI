@@ -1,0 +1,91 @@
+<!-- src/app/componentes/peticiones/peticiones-actualizar/peticiones-actualizar.component.html -->
+@if (peticion) {
+  <div class="modal-backdrop">
+    <div class="modal-window" role="dialog" aria-modal="true" aria-labelledby="modal-title-peticion">
+      <div class="modal-header">
+        <h3 id="modal-title-peticion">Editar petición — #{{ form.value.id }}</h3>
+        <button class="close-btn" type="button" (click)="cancelar()" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        @if (error) { <div class="error">{{ error }}</div> }
+
+        <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+          <div class="grid-2">
+            <label>
+              Título *
+              <input type="text" formControlName="titulo" />
+            </label>
+
+            <label>
+              Tipo de actividad *
+              <input type="text" formControlName="actividad_tipo" />
+            </label>
+          </div>
+
+          <label class="full">
+            Descripción
+            <textarea formControlName="descripcion" rows="3"></textarea>
+          </label>
+
+          <div class="grid-2">
+            <label>
+              Lugar (ciudad/dirección) *
+              <input type="text" formControlName="lugar_ciudad" />
+            </label>
+
+            <label>
+              Fecha deseada
+              <input type="date" formControlName="fechahora_deseada" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>
+              Duración (horas) *
+              <input type="number" min="0" step="1" formControlName="duracion_horas" />
+            </label>
+
+            <label>
+              Necesidades concretas
+              <input type="text" formControlName="necesidades_concretas" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>
+              Presupuesto mínimo
+              <input type="number" min="0" step="0.01" formControlName="presupuesto_min" />
+            </label>
+
+            <label>
+              Presupuesto máximo
+              <input type="number" min="0" step="0.01" formControlName="presupuesto_max" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>
+              Teléfono de contacto
+              <input type="tel" formControlName="contacto_telefono" />
+            </label>
+
+            <label>
+              Estado
+              <select formControlName="estado">
+                @for (e of estadoOpciones; track e) {
+                  <option [value]="e">{{ e }}</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button type="submit" [disabled]="loading">Guardar</button>
+            <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

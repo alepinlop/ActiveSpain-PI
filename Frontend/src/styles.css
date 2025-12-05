@@ -1,0 +1,53 @@
+/* --- variables globales (mover aquí para que estén realmente disponibles) --- */
+:root {
+  --carmesí: #DC143C;   /* carmesí */
+  --albero: #F4C430;    /* albero (amarillo cálido) */
+  --albero-dark: #FFAB60;
+  --muted: #475569;
+  --bg: #fffbeb;;
+  --text-default: #0f172a;
+}
+
+/* You can add global styles to this file, and also import other style files */
+/* 1) Reset básico */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--text-default);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* 2) Hacer que el "main" de la app no tenga padding ni centrado */
+.app-main {
+  padding: 0 !important;      /* elimina el padding que tenías */
+  margin: 0 !important;       /* elimina margin: 0 auto que centraba */
+  max-width: none !important; /* permite ancho completo */
+  width: 100%;
+}
+
+/* 3) Asegurarnos que los contenedores internos no añadan margen a la izquierda */
+.container {
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100%;
+}
+
+/* 4) Opcional: si .card, .tabla-wrapper u otros tienen padding por defecto, resetear */
+.card, .form-card, .tabla-wrapper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* 5) Si quieres que el contenido pase pegado al borde del viewport (muy a la izquierda),
+   pero mantener la nav con algo de espacio, deja la nav con padding:
+*/
+.main-nav {
+  padding-left: 12px; /* ajusta si quieres un poco de breathing room en la cabecera */
+}
+
+

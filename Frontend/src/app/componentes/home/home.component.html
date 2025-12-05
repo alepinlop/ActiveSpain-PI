@@ -1,0 +1,77 @@
+<!-- src/app/home/home.component.html -->
+<div class="home-wrap">
+  <section class="hero">
+    <h1 class="hero-title">Conectamos aventura con aventureros</h1>
+    <p class="hero-sub">
+      La plataforma que une a guías, empresas de ocio y particulares con personas que buscan
+      experiencias únicas de aventura, senderismo, yincanas y mucho más por toda España.
+    </p>
+
+    <div class="hero-ctas">
+      <button class="btn btn-carmesí" (click)="goTo('ofertas')">
+        <!-- icon simplificado -->
+        <span class="btn-icon">🎒</span>
+        Ver Ofertas de Actividades
+      </button>
+
+      <button class="btn btn-albero" (click)="goTo('peticiones')">
+        <span class="btn-icon">👥</span>
+        Ver Peticiones de Clientes
+      </button>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <div class="feature-ico">📍</div>
+      <h3 class="feature-title">Búsqueda Geolocalizada</h3>
+      <p>Encuentra actividades y clientes cerca de ti. Filtra por ubicación y descubre oportunidades en tu zona.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-ico">📅</div>
+      <h3 class="feature-title">Gestión Sencilla</h3>
+      <p>Publica tus actividades o peticiones en minutos. Actualiza, modifica o elimina tus anuncios cuando quieras.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-ico">⭐</div>
+      <h3 class="feature-title">Contacto Directo</h3>
+      <p>Conecta directamente con ofertantes o consumidores. Sin intermediarios, tú decides cómo gestionar tus reservas.</p>
+    </div>
+  </section>
+
+  <section class="howitworks">
+    <h2>¿Cómo funciona?</h2>
+
+    <div class="how-grid">
+      <div class="how-block">
+        <h4>Para Ofertantes</h4>
+        <ol>
+          <li><strong>Publica tu actividad:</strong> Crea una oferta con todos los detalles.</li>
+          <li><strong>Recibe contactos:</strong> Los interesados te contactan directamente.</li>
+          <li><strong>Gestiona tus ofertas:</strong> Actualiza o elimina tus ofertas.</li>
+        </ol>
+      </div>
+
+      <div class="how-block">
+        <h4>Para Consumidores</h4>
+        <ol>
+          <li><strong>Busca actividades:</strong> Explora por tipo, ubicación y precio.</li>
+          <li><strong>Contacta directamente:</strong> Llama o escribe a los ofertantes.</li>
+          <li><strong>Disfruta la experiencia:</strong> Reserva y vive la aventura.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-bar">
+    <h3>¿Listo para empezar?</h3>
+    <p>Únete a la comunidad de aventureros y descubre o comparte experiencias únicas.</p>
+
+    <div class="cta-buttons">
+      <button class="cta-white" (click)="goTo('ofertas')">Explorar Ofertas</button>
+      <button class="cta-albero" (click)="goTo('peticiones')">Ver Peticiones</button>
+    </div>
+  </section>
+</div>

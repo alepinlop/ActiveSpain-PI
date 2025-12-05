@@ -1,0 +1,106 @@
+<div class="peticiones-wrap">
+  <div class="header">
+    <div>
+      <h2>Peticiones de Clientes</h2>
+      <p class="sub">Descubre qué actividades están buscando los consumidores.</p>
+    </div>
+
+    @if (currentUser && currentUser.rol === 'consumidor') {
+      <div class="actions">
+        <button class="btn-crear" type="button" (click)="toggleCrear()">
+          {{ mostrarCrear ? 'Cancelar' : 'Crear nueva petición' }}
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (mostrarCrear) {
+    <div class="crear-wrapper">
+      <app-peticiones-crear (created)="onCreated()" (cancel)="mostrarCrear=false"></app-peticiones-crear>
+    </div>
+  }
+
+  @if (cargando) { <div class="info">Cargando peticiones...</div> }
+  @if (error) { <div class="error">{{ error }}</div> }
+
+  @if (!cargando && peticiones.length > 0) {
+    <div class="peticiones-grid">
+      @for (p of peticiones; track p.id) {
+        <article class="peticion-card" role="article" [attr.aria-labelledby]="'peticion-' + p.id">
+          <header class="card-top">
+            <div class="card-titulo">
+              <h3 id="peticion-{{p.id}}" class="titulo">{{ p.titulo || '—' }}</h3>
+              <span class="badge tipo">{{ p.actividad_tipo || '-' }}</span>
+            </div>
+            <div class="meta-right">
+              <div class="meta-line"><strong>ID:</strong> {{ p.id }}</div>
+              <div class="meta-line"><strong>Estado:</strong> <span class="estado">{{ p.estado || '—' }}</span></div>
+            </div>
+          </header>
+
+          <section class="card-body">
+            <p class="descripcion">{{ p.descripcion || '-' }}</p>
+
+            <div class="grid-info">
+              <div class="info-row"><strong>Consumidor:</strong><span>{{ ownerName(p) }}</span></div>
+              <div class="info-row"><strong>Lugar:</strong><span>{{ p.lugar_ciudad || '-' }}</span></div>
+              <div class="info-row"><strong>Fecha/Hora:</strong><span>{{ p.fechahora_deseada || '-' }}</span></div>
+              <div class="info-row"><strong>Duración:</strong><span>{{ formatDuracion(p.duracion_horas) }}</span></div>
+              <div class="info-row"><strong>Necesidades:</strong><span>{{ p.necesidades_concretas || '-' }}</span></div>
+              <div class="info-row"><strong>Presupuesto:</strong>
+                <span>
+                  {{ (p.presupuesto_min !== null && p.presupuesto_min !== undefined) ? (p.presupuesto_min + ' €') : '-' }}
+                  <span *ngIf="p.presupuesto_max"> — {{ p.presupuesto_max }} €</span>
+                </span>
+              </div>
+              <div class="info-row"><strong>Contacto:</strong><span>{{ p.contacto_telefono || '-' }}</span></div>
+              <div class="info-row"><strong>Creado:</strong><span>{{ p.created_at || '-' }}</span></div>
+              <div class="info-row"><strong>Últ. mod.:</strong><span>{{ p.updated_at || '-' }}</span></div>
+            </div>
+          </section>
+
+          <footer class="card-actions">
+            <div class="contact-info">
+              <span class="small"><strong>Usuario:</strong> {{ ownerName(p) }}</span>
+            </div>
+
+            <div class="accion-botones">
+              @if (isOwner(p)) {
+                <button class="btn-editar" (click)="startEdit(p)">Editar</button>
+                <button class="btn-borrar" (click)="startDelete(p.id)">Borrar</button>
+              } @else {
+                <span class="not-owner">—</span>
+              }
+            </div>
+          </footer>
+
+          <!-- Renderizar inline el componente de borrado justo debajo de la tarjeta -->
+          @if (deletingId === p.id) {
+            <div class="inline-borrar">
+              <app-peticiones-borrar
+                [id]="p.id"
+                (deleted)="onDeleted()"
+                (cancel)="deletingId = null">
+              </app-peticiones-borrar>
+            </div>
+          }
+        </article>
+      }
+    </div>
+
+    <!-- MODAL de edición (overlay) -->
+    @if (editing) {
+      <div class="modal-backdrop" (click)="editing = null">
+        <div class="modal-window" (click)="$event.stopPropagation()">
+          <app-peticiones-actualizar
+            [peticion]="editing"
+            (updated)="onUpdated()"
+            (cancel)="editing = null">
+          </app-peticiones-actualizar>
+        </div>
+      </div>
+    }
+  } @else {
+    @if (!cargando) { <div class="info">No hay peticiones.</div> }
+  }
+</div>

@@ -1,0 +1,74 @@
+<nav class="main-nav">
+  <div class="nav-inner">
+    <!-- Logo / brand -->
+    <div class="brand" (click)="go('/')">
+      <div class="brand-badge">🎯</div>
+      <div class="brand-text">ActiveSpain</div>
+    </div>
+
+    <!-- Desktop menu -->
+    <div class="desktop-menu">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-button" title="Inicio">
+        <span class="icon">🏠</span>
+        <span class="label">Inicio</span>
+      </a>
+
+      <a routerLink="/ofertas" routerLinkActive="active" class="nav-button" title="Ofertas">
+        <span class="icon">💼</span>
+        <span class="label">Ofertas</span>
+      </a>
+
+      <a routerLink="/peticiones" routerLinkActive="active" class="nav-button" title="Peticiones">
+        <span class="icon">👥</span>
+        <span class="label">Peticiones</span>
+      </a>
+
+      <a routerLink="/usuarios" routerLinkActive="active" class="nav-button" title="Usuarios">
+        <span class="icon">👤</span>
+        <span class="label">Usuarios</span>
+      </a>
+    </div>
+
+    <!-- Right area: auth / user -->
+    <div class="right-area">
+      @if (currentUserName) {
+        <div class="user-area">
+          <span class="greeting">Hola, {{ currentUserName }}</span>
+          <a (click)="logout()" class="logout-link">Cerrar sesión</a>
+        </div>
+      } @else {
+        <div class="user-area">
+          <a routerLink="/auth" routerLinkActive="active" class="login-link">Entrar / Registrar</a>
+        </div>
+      }
+
+      <!-- Mobile menu button -->
+      <button class="mobile-button" (click)="toggleMenu()" aria-label="Abrir menú">
+        ☰
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu (colapsable) -->
+  @if (isMenuOpen) {
+    <div class="mobile-menu">
+      <a (click)="go('/')" class="mobile-item">🏠 Inicio</a>
+      <a (click)="go('/ofertas')" class="mobile-item">💼 Ofertas</a>
+      <a (click)="go('/peticiones')" class="mobile-item">👥 Peticiones</a>
+      <a (click)="go('/usuarios')" class="mobile-item">👤 Usuarios</a>
+
+      @if (currentUserName) {
+        <div class="mobile-user">
+          <div class="mobile-greeting">Hola, {{ currentUserName }}</div>
+          <button class="mobile-logout" (click)="logout()">Cerrar sesión</button>
+        </div>
+      } @else {
+        <a (click)="go('/auth')" class="mobile-item">🔐 Entrar / Registrar</a>
+      }
+    </div>
+  }
+</nav>
+
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>

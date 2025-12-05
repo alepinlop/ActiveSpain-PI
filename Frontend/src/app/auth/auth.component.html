@@ -1,0 +1,82 @@
+<!-- src/app/auth/auth.component.html -->
+<div class="auth-container">
+  <h2>Acceso / Registro</h2>
+
+  <div class="tabs">
+    <button (click)="setTab('login')" [class.active]="activeTab === 'login'">Iniciar sesión</button>
+    <button (click)="setTab('register')" [class.active]="activeTab === 'register'">Registrar</button>
+  </div>
+
+  <div class="card">
+
+    @if (errorMsg) {
+      <div class="error">{{ errorMsg }}</div>
+    }
+
+    @if (successMsg) {
+      <div class="success">{{ successMsg }}</div>
+    }
+
+    <!-- LOGIN -->
+    @if (activeTab === 'login') {
+      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+        <label>
+          Email
+          <input type="email" formControlName="email" />
+        </label>
+        <label>
+          Contraseña
+          <input type="password" formControlName="password" />
+        </label>
+        <div class="actions">
+          <button type="submit" [disabled]="loading">Entrar</button>
+        </div>
+      </form>
+    }
+
+    <!-- REGISTER -->
+    @if (activeTab === 'register') {
+      <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+        <label>
+          Nombre
+          <input type="text" formControlName="nombre" />
+        </label>
+        <label>
+          Apellidos
+          <input type="text" formControlName="apellidos" />
+        </label>
+        <label>
+          Email
+          <input type="email" formControlName="email" />
+        </label>
+        <label>
+          Contraseña (mín 6)
+          <input type="password" formControlName="password" />
+        </label>
+        <label>
+          Rol
+          <select formControlName="rol">
+            <option value="consumidor">Consumidor</option>
+            <option value="ofertante">Ofertante</option>
+          </select>
+        </label>
+        <label>
+          Ciudad
+          <input type="text" formControlName="ciudad" />
+        </label>
+        <label>
+          Teléfono
+          <input type="text" formControlName="telefono" />
+        </label>
+        <label>
+          Descripción (opcional)
+          <textarea formControlName="descripcion"></textarea>
+        </label>
+        <div class="actions">
+          <button type="submit" [disabled]="loading">Registrar</button>
+        </div>
+      </form>
+    }
+
+  </div>
+</div>
