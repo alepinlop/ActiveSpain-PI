@@ -2,7 +2,7 @@
 // modelos.php
 class Modelo {
 
-    private $pdo;
+    public $pdo;
 
     public function __CONSTRUCT() {
         try {
@@ -204,72 +204,96 @@ class Modelo {
     }
 
     public function AnadeOferta($data) {
-        try {
-            // Verificar que usuario existe y rol = ofertante
-            $stm = $this->pdo->prepare("SELECT rol FROM usuarios WHERE id = ?");
-            $stm->execute(array($data->usuario_id));
-            $usr = $stm->fetch(PDO::FETCH_ASSOC);
-            if (!$usr) return false;
-            if ($usr['rol'] !== 'ofertante') return false;
+		try {
+			$sql = "INSERT INTO ofertas (
+						usuario_id, titulo, descripcion, actividad_tipo, lugar_ciudad, fechahora_inicio,
+						tarifa, preparacion_fisica, duracion_horas, material_necesario, material_ofertado,
+						plazas_min, plazas_max, transport_incluido
+					) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$stmt = $this->pdo->prepare($sql);
 
-            $sql = "INSERT INTO ofertas (usuario_id, titulo, descripcion, actividad_tipo, lugar_ciudad, lugar_direccion, fechahora_inicio, tarifa, preparacion_fisica, duracion_horas, material_necesario, material_ofertado, plazas_min, plazas_max, transport_incluido, estado)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->pdo->prepare($sql)->execute(array(
-                $data->usuario_id,
-                $data->titulo ?? '',
-                $data->descripcion ?? null,
-                $data->actividad_tipo ?? null,
-                $data->lugar_ciudad ?? null,
-                $data->lugar_direccion ?? null,
-                $data->fechahora_inicio ?? null,
-                $data->tarifa ?? 0.0,
-                $data->preparacion_fisica ?? 'Media',
-                $data->duracion_horas ?? 1.0,
-                !empty($data->material_necesario) ? 1 : 0,
-                $data->material_ofertado ?? null,
-                $data->plazas_min ?? 1,
-                $data->plazas_max ?? 10,
-                !empty($data->transport_incluido) ? 1 : 0,
-                $data->estado ?? 'publicada'
-            ));
-            return true;
-        } catch(Exception $e) {
-            //die($e->getMessage());
-            return false;
-        }
-    }
+			// Normalizar/asegurar valores
+			$usuario_id = isset($data->usuario_id) ? $data->usuario_id : null;
+			$titulo = isset($data->titulo) ? $data->titulo : null;
+			$descripcion = isset($data->descripcion) ? $data->descripcion : null;
+			$actividad_tipo = isset($data->actividad_tipo) ? $data->actividad_tipo : null;
+			$lugar_ciudad = isset($data->lugar_ciudad) ? $data->lugar_ciudad : null;
+			$fechahora_inicio = isset($data->fechahora_inicio) && $data->fechahora_inicio !== '' ? $data->fechahora_inicio : null;
+			$tarifa = isset($data->tarifa) && $data->tarifa !== '' ? $data->tarifa : 0.00;
+			$preparacion_fisica = isset($data->preparacion_fisica) ? $data->preparacion_fisica : 'Media';
+			$duracion_horas = isset($data->duracion_horas) ? $data->duracion_horas : 1.0;
+			$material_necesario = !empty($data->material_necesario) ? 1 : 0;
+			$material_ofertado = isset($data->material_ofertado) ? $data->material_ofertado : null;
+			$plazas_min = isset($data->plazas_min) ? $data->plazas_min : 1;
+			$plazas_max = isset($data->plazas_max) ? $data->plazas_max : 1;
+			$transport_incluido = !empty($data->transport_incluido) ? 1 : 0;
+
+			$stmt->execute(array(
+				$usuario_id,
+				$titulo,
+				$descripcion,
+				$actividad_tipo,
+				$lugar_ciudad,
+				$fechahora_inicio,
+				$tarifa,
+				$preparacion_fisica,
+				$duracion_horas,
+				$material_necesario,
+				$material_ofertado,
+				$plazas_min,
+				$plazas_max,
+				$transport_incluido
+			));
+
+			// devuelve id insertado
+			return $this->pdo->lastInsertId();
+		} catch (Exception $e) {
+			// Volcar información útil a error_log para que podamos ver el motivo exacto
+			error_log("AnadeOferta error: " . $e->getMessage());
+			error_log("AnadeOferta data: " . var_export($data, true));
+			return false;
+		}
+	}
+
 
     public function ModificaOferta($data) {
-        try {
-            // Comprobar que la oferta pertenece al usuario si se pasa usuario_id (lógica de seguridad)
-            if (empty($data->id)) return false;
+		try {
+			if (empty($data->id)) return false;
 
-            // Construcción simple del UPDATE (actualiza campos dados)
-            $sql = "UPDATE ofertas SET titulo = ?, descripcion = ?, actividad_tipo = ?, lugar_ciudad = ?, lugar_direccion = ?, fechahora_inicio = ?, tarifa = ?, preparacion_fisica = ?, duracion_horas = ?, material_necesario = ?, material_ofertado = ?, plazas_min = ?, plazas_max = ?, transport_incluido = ?, estado = ? WHERE id = ?";
-            $this->pdo->prepare($sql)->execute(array(
-                $data->titulo ?? '',
-                $data->descripcion ?? null,
-                $data->actividad_tipo ?? null,
-                $data->lugar_ciudad ?? null,
-                $data->lugar_direccion ?? null,
-                $data->fechahora_inicio ?? null,
-                $data->tarifa ?? 0.0,
-                $data->preparacion_fisica ?? 'Media',
-                $data->duracion_horas ?? 1.0,
-                !empty($data->material_necesario) ? 1 : 0,
-                $data->material_ofertado ?? null,
-                $data->plazas_min ?? 1,
-                $data->plazas_max ?? 10,
-                !empty($data->transport_incluido) ? 1 : 0,
-                $data->estado ?? 'publicada',
-                $data->id
-            ));
-            return true;
-        } catch(Exception $e) {
-            //die($e->getMessage());
-            return false;
-        }
-    }
+			// Actualiza los campos que componen la oferta.
+			$sql = "UPDATE ofertas
+					SET titulo = ?, descripcion = ?, actividad_tipo = ?, lugar_ciudad = ?, 
+						fechahora_inicio = ?, tarifa = ?, preparacion_fisica = ?, duracion_horas = ?, 
+						material_necesario = ?, material_ofertado = ?, plazas_min = ?, plazas_max = ?, 
+						transport_incluido = ?, estado = ?
+					WHERE id = ?";
+
+			$this->pdo->prepare($sql)->execute(array(
+				$data->titulo ?? '',
+				$data->descripcion ?? null,
+				$data->actividad_tipo ?? null,
+				$data->lugar_ciudad ?? null,          // <-- lugar_ciudad (corregido)
+				$data->fechahora_inicio ?? null,
+				$data->tarifa ?? 0.0,
+				$data->preparacion_fisica ?? 'Media',
+				$data->duracion_horas ?? 1.0,
+				!empty($data->material_necesario) ? 1 : 0,
+				$data->material_ofertado ?? null,
+				$data->plazas_min ?? 1,
+				$data->plazas_max ?? 10,
+				!empty($data->transport_incluido) ? 1 : 0,
+				$data->estado ?? 'publicada',
+				$data->id
+			));
+
+			return true;
+		} catch(Exception $e) {
+			// Dejar rastro en el error_log para depuración
+			error_log("ModificaOferta error: " . $e->getMessage());
+			error_log("ModificaOferta data: " . var_export($data, true));
+			return false;
+		}
+	}
 
     public function BorraOferta($id) {
         try {
@@ -324,62 +348,71 @@ class Modelo {
     }
 
     public function AnadePeticion($data) {
-        try {
-            // Verificar usuario existe y rol = consumidor
-            $stm = $this->pdo->prepare("SELECT rol FROM usuarios WHERE id = ?");
-            $stm->execute(array($data->usuario_id));
-            $usr = $stm->fetch(PDO::FETCH_ASSOC);
-            if (!$usr) return false;
-            if ($usr['rol'] !== 'consumidor') return false;
+		try {
+			// Verificar usuario existe y rol = consumidor
+			$stm = $this->pdo->prepare("SELECT rol FROM usuarios WHERE id = ?");
+			$stm->execute(array($data->usuario_id));
+			$usr = $stm->fetch(PDO::FETCH_ASSOC);
+			if (!$usr) return false;
+			if ($usr['rol'] !== 'consumidor') return false;
 
-            $sql = "INSERT INTO peticiones (usuario_id, titulo, descripcion, actividad_tipo, lugar_ciudad, lugar_direccion, fechahora_deseada, duracion_horas, necesidades_concretas, presupuesto_min, presupuesto_max, contacto_telefono, estado)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->pdo->prepare($sql)->execute(array(
-                $data->usuario_id,
-                $data->titulo ?? '',
-                $data->descripcion ?? null,
-                $data->actividad_tipo ?? null,
-                $data->lugar_ciudad ?? null,
-                $data->lugar_direccion ?? null,
-                $data->fechahora_deseada ?? null,
-                $data->duracion_horas ?? 1.0,
-                $data->necesidades_concretas ?? null,
-                $data->presupuesto_min ?? null,
-                $data->presupuesto_max ?? null,
-                $data->contacto_telefono ?? null,
-                $data->estado ?? 'activa'
-            ));
-            return true;
-        } catch(Exception $e) {
-            //die($e->getMessage());
-            return false;
-        }
-    }
+			// Aseguramos que el número de placeholders coincide con las columnas (12)
+			$sql = "INSERT INTO peticiones (
+						usuario_id, titulo, descripcion, actividad_tipo, lugar_ciudad,
+						fechahora_deseada, duracion_horas, necesidades_concretas,
+						presupuesto_min, presupuesto_max, contacto_telefono, estado
+					) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$this->pdo->prepare($sql)->execute(array(
+				$data->usuario_id,
+				$data->titulo ?? '',
+				$data->descripcion ?? null,
+				$data->actividad_tipo ?? null,
+				$data->lugar_ciudad ?? null,
+				$data->fechahora_deseada ?? null,
+				$data->duracion_horas ?? 1.0,
+				$data->necesidades_concretas ?? null,
+				$data->presupuesto_min ?? null,
+				$data->presupuesto_max ?? null,
+				$data->contacto_telefono ?? null,
+				$data->estado ?? 'activa'
+			));
+			return true;
+		} catch(Exception $e) {
+			error_log("AnadePeticion error: " . $e->getMessage());
+			error_log("AnadePeticion data: " . var_export($data, true));
+			return false;
+		}
+	}
 
     public function ModificaPeticion($data) {
-        try {
-            if (empty($data->id)) return false;
-            $sql = "UPDATE peticiones SET titulo = ?, descripcion = ?, actividad_tipo = ?, lugar_ciudad = ?, lugar_direccion = ?, fechahora_deseada = ?, duracion_horas = ?, necesidades_concretas = ?, presupuesto_min = ?, presupuesto_max = ?, contacto_telefono = ?, estado = ? WHERE id = ?";
-            $this->pdo->prepare($sql)->execute(array(
-                $data->titulo ?? '',
-                $data->descripcion ?? null,
-                $data->actividad_tipo ?? null,
-                $data->lugar_ciudad ?? null,
-                $data->lugar_direccion ?? null,
-                $data->fechahora_deseada ?? null,
-                $data->duracion_horas ?? 1.0,
-                $data->necesidades_concretas ?? null,
-                $data->presupuesto_min ?? null,
-                $data->presupuesto_max ?? null,
-                $data->contacto_telefono ?? null,
-                $data->estado ?? 'activa',
-                $data->id
-            ));
-            return true;
-        } catch(Exception $e) {
-            return false;
-        }
-    }
+		try {
+			if (empty($data->id)) return false;
+			$sql = "UPDATE peticiones SET
+						titulo = ?, descripcion = ?, actividad_tipo = ?, lugar_ciudad = ?,
+						fechahora_deseada = ?, duracion_horas = ?, necesidades_concretas = ?,
+						presupuesto_min = ?, presupuesto_max = ?, contacto_telefono = ?, estado = ?
+					WHERE id = ?";
+			$this->pdo->prepare($sql)->execute(array(
+				$data->titulo ?? '',
+				$data->descripcion ?? null,
+				$data->actividad_tipo ?? null,
+				$data->lugar_ciudad ?? null,
+				$data->fechahora_deseada ?? null,
+				$data->duracion_horas ?? 1.0,
+				$data->necesidades_concretas ?? null,
+				$data->presupuesto_min ?? null,
+				$data->presupuesto_max ?? null,
+				$data->contacto_telefono ?? null,
+				$data->estado ?? 'activa',
+				$data->id
+			));
+			return true;
+		} catch(Exception $e) {
+			error_log("ModificaPeticion error: " . $e->getMessage());
+			error_log("ModificaPeticion data: " . var_export($data, true));
+			return false;
+		}
+	}
 
     public function BorraPeticion($id) {
         try {

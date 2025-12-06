@@ -3,7 +3,7 @@
 -- Compatible con MySQL (InnoDB, utf8mb4)
 
 -- Elimina base de datos previa si existe (útil para pruebas)
-DROP DATABASE IF EXISTS proyecto_integrado;
+-- DROP DATABASE IF EXISTS proyecto_integrado;
 CREATE DATABASE proyecto_integrado CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE proyecto_integrado;
 

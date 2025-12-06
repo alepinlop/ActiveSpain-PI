@@ -6,13 +6,16 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Usuario } from '../modelos/usuarios';
 import { Peticiones } from '../modelos/peticiones';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiciosService {
 
-  private apiUrl = APP_CONFIG.API_URL;
+  //private apiUrl = APP_CONFIG.API_URL;
+
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
