@@ -10,6 +10,11 @@
   justify-content: center;
   z-index: 9999; /* importante */
   padding: 16px;
+  box-sizing: border-box;
+
+  /* permitir scroll en backdrop si la pantalla es muy pequeña */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* modal window */
@@ -23,6 +28,11 @@
   box-shadow: 0 20px 45px rgba(2,6,23,0.3);
   padding: 18px;
   box-sizing: border-box;
+
+  /* permite scroll interno cuando el contenido supera la altura de la ventana */
+  max-height: calc(100vh - 48px); /* dejar margen top/bottom */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* header */
@@ -46,6 +56,7 @@ input[type="text"], input[type="number"], input[type="datetime-local"], select, 
   border: 1px solid #d1d5db;
   border-radius:6px;
   font-size: 0.95rem;
+  box-sizing: border-box;
 }
 
 /* actions */
@@ -53,6 +64,15 @@ input[type="text"], input[type="number"], input[type="datetime-local"], select, 
 .modal-actions button { padding:8px 14px; border-radius:8px; border:none; cursor:pointer; }
 .modal-actions button:first-child { background:#DC143C; color:#fff; } /* Guardar / Crear */
 .modal-actions button:last-child { background:#9CA3AF; color:#fff; } /* Cancelar */
+
+/* ERROR BOX */
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin: 6px 0;
+}
 
 /* responsive */
 @media (max-width: 720px) {

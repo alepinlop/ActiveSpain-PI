@@ -35,21 +35,29 @@
   gap:12px;
   cursor:pointer;
 }
-.brand-badge {
-  width:56px;              /* <-- más grande */
-  height:56px;             /* <-- más grande */
-  background: var(--carmesí);
-  border-radius: 999px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;         /* emoji más grande */
-  box-shadow: 0 8px 26px rgba(0,0,0,0.16);
+
+/* nueva regla para la imagen del logo */
+.brand-logo {
+  display:block;
+  height:56px;        /* tamaño equivalente a la diana anterior */
+  width:auto;
+  object-fit:contain;
+  -webkit-user-drag: none;
 }
+
+/* opcional: texto escondido visualmente (si quieres mantener SEO o accesibilidad) */
 .brand-text {
   font-weight:800;
   color: white;
   font-size:1.12rem;
+  /* lo ocultamos visualmente porque el logo ya contiene el texto */
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* desktop menu */
@@ -125,4 +133,92 @@
   .desktop-menu { display:flex; }
   .mobile-button { display:none; }
   .mobile-menu { display:none; }
+}
+
+/* FOOTER */
+.site-footer {
+  background: linear-gradient(90deg, rgba(15,23,42,1), rgba(2,6,23,1)); /* fondo oscuro */
+  color: #e6eef8;
+  padding: 18px 12px;
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+.site-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+/* left / center / right */
+.footer-left,
+.footer-center,
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* left text */
+.brand-footer {
+  font-weight: 700;
+  color: #fff;
+  margin-right: 8px;
+  letter-spacing: 0.2px;
+}
+.credit {
+  color: rgba(230,238,248,0.8);
+}
+
+/* center */
+.footer-center {
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  color: rgba(230,238,248,0.9);
+  font-weight: 500;
+}
+
+/* right - social icons */
+.footer-right {
+  justify-content: flex-end;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  color: #e6eef8;
+  text-decoration: none;
+  transition: all .12s ease;
+  margin-left: 8px;
+}
+.social-link svg { display:block; }
+.social-link:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+}
+
+/* Responsive: apilar en móviles */
+@media (max-width: 720px) {
+  .site-footer-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  .footer-left, .footer-center, .footer-right {
+    width: 100%;
+    justify-content: center;
+  }
+  .footer-right { margin-top: 6px; }
 }

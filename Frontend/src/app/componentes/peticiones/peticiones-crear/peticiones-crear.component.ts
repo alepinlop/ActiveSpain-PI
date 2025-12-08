@@ -37,7 +37,6 @@ export class PeticionesCrearComponent implements OnInit {
 
   ngOnInit(): void {
     // inicialización si hace falta
-    // console.log('[PeticionesCrear] init form', this.form.value);
   }
 
   // normaliza datetime-local -> 'YYYY-MM-DD HH:MM:SS'
@@ -64,15 +63,16 @@ export class PeticionesCrearComponent implements OnInit {
     // normalizar fecha
     data.fechahora_deseada = this.normalizeFecha(data.fechahora_deseada);
 
-    // Si el usuario introduce un único presupuesto, podrías mapearlo aquí.
-    // Por ahora enviamos presupuesto_min y presupuesto_max tal cual están en el form.
-
     // Llamada al servicio
     this.servicios.anadePeticion(data).subscribe({
       next: (res: any) => {
+        // asegurar que loading se desactive siempre
         this.loading = false;
-        // backend responde {"result":"OK"} o {"result":"FAIL", ...}
-        if (res && res.result && res.result === 'OK') {
+
+        // backend responde {"result":"OK"} o, en debug endpoints, { ok: true }
+        const ok = (res && (res.result === 'OK' || res.ok === true));
+        if (ok) {
+          // reset del formulario
           this.form.reset({
             titulo: '',
             descripcion: '',
@@ -86,7 +86,13 @@ export class PeticionesCrearComponent implements OnInit {
             contacto_telefono: '',
             estado: 'activa'
           });
+
+          // emitir evento para que el padre recargue
           this.created.emit();
+
+          // cerrar este modal inmediatamente (el padre escucha y ocultará su variable)
+          // emitimos cancel para que el padre lo oculte (mostrarCrear = false)
+          this.cancel.emit();
         } else {
           this.error = (res && (res.error || res.result)) ? (res.error || res.result || 'Error') : 'Error creando petición';
         }

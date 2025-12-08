@@ -13,8 +13,7 @@ import { environment } from '../../environments/environment';
 })
 export class ServiciosService {
 
-  //private apiUrl = APP_CONFIG.API_URL;
-
+  // usa la URL del environment (ajusta en environment.ts)
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
@@ -28,70 +27,98 @@ export class ServiciosService {
     return { headers: new HttpHeaders(headersInit) };
   }
 
+  // helper: adjunta token al body (por si el header no llega)
+  private attachTokenToBody(body: any): any {
+    const token = localStorage.getItem('pi_api_token');
+    if (token) {
+      // no mutamos el objeto original por si lo reusas en llamdas; clonamos
+      const b = Object.assign({}, body);
+      b.token = token;
+      return b;
+    }
+    return body;
+  }
+
   listarUsuarios(): Observable<Usuario[]> {
     const body = { accion: 'ListarUsuarios' };
-    return this.http.post<Usuario[]>(this.apiUrl, body, this.httpOptionsWithToken())
-      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
+    return this.http.post<Usuario[]>(
+      this.apiUrl,
+      this.attachTokenToBody(body),
+      this.httpOptionsWithToken()
+    ).pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   registerUsuario(payload: any) {
     const body = { accion: 'AnadeUsuario', usuario: payload };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken())
+    return this.http.post<any>(this.apiUrl, this.attachTokenToBody(body), this.httpOptionsWithToken())
       .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   loginUsuario(email: string, password: string) {
     const body = { accion: 'LoginUsuario', email, password };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken())
+    // login no necesita token
+    return this.http.post<any>(this.apiUrl, body, { headers: new HttpHeaders({'Content-Type': 'application/json'}) })
       .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
-  // Otros métodos (ofertas/peticiones) deben usar this.httpOptionsWithToken() también
+  // OFERTAS
   anadeOferta(oferta: any) {
-  const body = { accion: 'AnadeOferta', oferta };
-  const opts = this.httpOptionsWithToken();
-  console.log('[ServiciosService] anadeOferta - body:', body);
-  console.log('[ServiciosService] anadeOferta - headers:', opts);
-  return this.http.post<any>(this.apiUrl, body, opts);
-}
-
+    const body = { accion: 'AnadeOferta', oferta };
+    const bodyWithToken = this.attachTokenToBody(body);
+    const opts = this.httpOptionsWithToken();
+    console.debug('[ServiciosService] anadeOferta - body:', bodyWithToken, 'opts:', opts);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, opts)
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
+  }
 
   modificaOferta(oferta: any) {
     const body = { accion: 'ModificaOferta', oferta };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken());
+    const bodyWithToken = this.attachTokenToBody(body);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   borraOferta(id: number) {
     const body = { accion: 'BorraOferta', id };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken());
+    const bodyWithToken = this.attachTokenToBody(body);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   listarOfertas() {
     const body = { accion: 'ListarOfertas' };
-    return this.http.post<any[]>(this.apiUrl, body, this.httpOptionsWithToken());
+    return this.http.post<any[]>(this.apiUrl, this.attachTokenToBody(body), this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
+  // PETICIONES
   anadePeticion(peticion: any) {
     const body = { accion: 'AnadePeticion', peticion };
-    console.log('[ServiciosService] anadePeticion - body:', body);
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken())
+    const bodyWithToken = this.attachTokenToBody(body);
+    console.debug('[ServiciosService] anadePeticion - body:', bodyWithToken);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, this.httpOptionsWithToken())
       .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   modificaPeticion(peticion: any) {
     const body = { accion: 'ModificaPeticion', peticion };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken());
+    const bodyWithToken = this.attachTokenToBody(body);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   borraPeticion(id: number) {
     const body = { accion: 'BorraPeticion', id };
-    return this.http.post<any>(this.apiUrl, body, this.httpOptionsWithToken());
+    const bodyWithToken = this.attachTokenToBody(body);
+    return this.http.post<any>(this.apiUrl, bodyWithToken, this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
   }
 
   listarPeticiones(): Observable<Peticiones[]> {
-  return this.http.post<Peticiones[]>(APP_CONFIG.API_URL, {
-    accion: 'ListarPeticiones'
-  });
-}
+    const body = { accion: 'ListarPeticiones' };
+    // usar this.apiUrl en lugar de APP_CONFIG directo
+    return this.http.post<Peticiones[]>(this.apiUrl, this.attachTokenToBody(body), this.httpOptionsWithToken())
+      .pipe(catchError(err => { console.error(err); return throwError(() => err); }));
+  }
 
 }

@@ -17,6 +17,10 @@ export class ListarComponent implements OnInit {
   cargando = false;
   error: string | null = null;
 
+  // nuevos contadores
+  ofertantesCount: number = 0;
+  consumidoresCount: number = 0;
+
   constructor(private servicios: ServiciosService) { }
 
   ngOnInit(): void {
@@ -29,6 +33,9 @@ export class ListarComponent implements OnInit {
     this.servicios.listarUsuarios().subscribe({
       next: (data: Usuario[]) => {
         this.usuarios = data || [];
+        // calcular contadores (asegurando que rol existe)
+        this.ofertantesCount = this.usuarios.filter(u => (u.rol || '').toString() === 'ofertante').length;
+        this.consumidoresCount = this.usuarios.filter(u => (u.rol || '').toString() === 'consumidor').length;
         this.cargando = false;
       },
       error: (err) => {

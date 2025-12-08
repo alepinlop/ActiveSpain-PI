@@ -32,14 +32,26 @@
 /* tabla */
 .tabla-wrap { background: transparent; }
 .table-responsive { overflow-x:auto; border-radius:12px; background:white; box-shadow:0 18px 40px rgba(15,23,42,0.06); }
+
+/* Ajuste: aplicamos el gradiente a la fila del header en lugar de a cada th */
 .usuarios-table { width:100%; border-collapse:collapse; min-width:1000px; }
+.usuarios-table thead tr {
+  background: linear-gradient(90deg,#F4C430,#FFAB60);
+  color: white;
+}
+/* dejamos los th sin background individual */
 .usuarios-table thead th {
   padding:12px 16px;
   text-align:left;
   color:white;
   font-weight:700;
-  background: linear-gradient(90deg,#F4C430,#FFAB60);
+  background: transparent;
+  border: none;
 }
+/* radio en las esquinas superiores para que siga la forma del contenedor */
+.usuarios-table thead th:first-child { border-top-left-radius: 12px; }
+.usuarios-table thead th:last-child { border-top-right-radius: 12px; }
+
 .usuarios-table tbody tr { border-bottom:1px solid #f3f4f6; }
 .usuarios-table td { padding:12px 16px; vertical-align:middle; color:#0f172a; font-size:0.95rem; }
 
