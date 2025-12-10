@@ -32,7 +32,12 @@ export class ListarComponent implements OnInit {
     this.error = null;
     this.servicios.listarUsuarios().subscribe({
       next: (data: Usuario[]) => {
-        this.usuarios = data || [];
+        // Ordenar usuarios por id ascendente
+        this.usuarios = (data || []).slice().sort((a, b) => {
+          const idA = Number(a.id ?? 0);
+          const idB = Number(b.id ?? 0);
+          return idA - idB;
+        });
         // calcular contadores (asegurando que rol existe)
         this.ofertantesCount = this.usuarios.filter(u => (u.rol || '').toString() === 'ofertante').length;
         this.consumidoresCount = this.usuarios.filter(u => (u.rol || '').toString() === 'consumidor').length;

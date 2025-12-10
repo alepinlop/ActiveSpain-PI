@@ -67,8 +67,6 @@
               <th>Ciudad</th>
               <th>Teléfono</th>
               <th>Activo</th>
-              <th>Ofertas</th>
-              <th>Peticiones</th>
               <th>Creado</th>
             </tr>
           </thead>
@@ -108,14 +106,6 @@
                 </td>
 
                 <td class="cell activo">{{ u.esta_activo ? 'Sí' : 'No' }}</td>
-
-                <td class="cell num text-center">
-                  {{ u.num_ofertas || 0 }}
-                </td>
-
-                <td class="cell num text-center">
-                  {{ u.num_peticiones || 0 }}
-                </td>
 
                 <td class="cell creado">
                   {{ u.created_at ? (u.created_at | date:'short') : '-' }}
