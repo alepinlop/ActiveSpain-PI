@@ -10,15 +10,15 @@
     <form [formGroup]="form" (ngSubmit)="submit()" class="modal-form">
       <div class="grid cols-2">
         <label>Título *
-          <input type="text" formControlName="titulo">
+          <input type="text" formControlName="titulo" placeholder="Título de la oferta">
         </label>
 
         <label>Tipo *
-          <input type="text" formControlName="actividad_tipo">
+          <input type="text" formControlName="actividad_tipo" placeholder="Tipo de actividad">
         </label>
 
         <label>Lugar (ciudad / dirección) *
-          <input type="text" formControlName="lugar_ciudad">
+          <input type="text" formControlName="lugar_ciudad" placeholder="Ciudad, provincia o dirección">
         </label>
 
         <label>Fecha y hora *

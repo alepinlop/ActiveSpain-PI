@@ -1,4 +1,3 @@
-// src/app/componentes/ofertas/ofertas-actualizar/ofertas-actualizar.component.ts
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';

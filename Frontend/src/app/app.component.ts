@@ -30,16 +30,16 @@ export class AppComponent implements OnDestroy {
     });
   }
 
-  logout() {
+  cerrarSesion() {
     this.isMenuOpen = false;
     this.auth.logout('/auth');
   }
 
-  toggleMenu() {
+  alternarMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  go(route: string) {
+  ir(route: string) {
     // Navegar y cerrar menú móvil
     this.router.navigate([route]);
     this.isMenuOpen = false;

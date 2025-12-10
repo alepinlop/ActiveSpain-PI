@@ -1,26 +1,28 @@
-.ofertas-wrap {
+.ofertas-contenedor {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 8px;
 }
 
-.header {
+/* encabezado */
+.encabezado {
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap: 12px;
   margin-bottom: 12px;
 }
-.header h2 {
+.encabezado h2 {
   margin: 0;
   color: #DC143C; /* carmesí */
 }
-.header .sub {
+.encabezado .sub {
   margin: 4px 0 0 0;
   color: #475569;
 }
 
+/* botón crear */
 .btn-crear {
   background: #DC143C;
   color: #fff;
@@ -32,18 +34,18 @@
 }
 .btn-crear:hover { transform: translateY(-2px); }
 
-.crear-wrap { margin-bottom: 12px; }
+.crear-contenedor { margin-bottom: 12px; }
 
 /* Lista vertical */
-.ofertas-grid {
+.grid-ofertas {
   display: flex;
   flex-direction: column; /* una columna — cada tarjeta en su propia fila */
   gap: 16px;
   width: 100%;
 }
 
-/* Card */
-.oferta-card {
+/* Tarjeta (card) */
+.tarjeta-oferta {
   background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
@@ -55,22 +57,23 @@
   flex-direction: column;
   transition: transform .14s ease, box-shadow .14s ease;
 }
-.oferta-card:hover {
+.tarjeta-oferta:hover {
   transform: translateY(-6px);
   box-shadow: 0 28px 60px rgba(15,23,42,0.12);
 }
 
-.card-top {
+/* cabezal */
+.cabezal-tarjeta {
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
   padding: 14px 18px 6px 18px;
   gap: 8px;
 }
-.card-titulo { display:flex; align-items:center; gap:12px; flex:1; }
+.titulo-tarjeta { display:flex; align-items:center; gap:12px; flex:1; }
 .titulo { margin: 0; color: #DC143C; font-size: 1.05rem; }
-.badge.tipo {
-  background: #FFAB60;
+.etiqueta.tipo {
+  background: #d9143b;
   color: white;
   padding: 6px 10px;
   border-radius: 999px;
@@ -78,16 +81,17 @@
   white-space: nowrap;
 }
 
-.meta-right { text-align:right; font-size: 0.85rem; color: #475569; }
+.meta-derecha { text-align:right; font-size: 0.85rem; color: #475569; }
 
-.card-body {
+/* cuerpo */
+.cuerpo-tarjeta {
   padding: 6px 18px 14px 18px;
   border-top: 1px solid rgba(0,0,0,0.04);
 }
 .descripcion { color: #334155; margin: 8px 0 12px 0; }
 
 /* info grid */
-.grid-info {
+.info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 8px 12px;
@@ -98,17 +102,17 @@
 }
 .info-row strong { color: #0f172a; margin-right: 6px; }
 
-/* footer actions */
-.card-actions {
+/* footer acciones */
+.acciones-tarjeta {
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding: 12px 18px;
   border-top: 1px solid rgba(0,0,0,0.04);
 }
-.accion-botones { display:flex; gap:8px; align-items:center; }
+.botones-accion { display:flex; gap:8px; align-items:center; }
 
-/* buttons edit/delete */
+/* botones editar/borrar */
 .btn-editar {
   background: #F4C430;
   color: #111827;
@@ -131,9 +135,12 @@
 
 .not-owner { color: #94a3b8; }
 
-/* responsive tweaks */
+/* inline delete container */
+.borrado-inline { padding: 8px 18px 12px 18px; }
+
+/* responsive */
 @media (max-width: 720px) {
-  .card-top { flex-direction: column; align-items: stretch; }
-  .meta-right { text-align: left; margin-top: 6px; }
-  .grid-info { grid-template-columns: 1fr 1fr; }
+  .cabezal-tarjeta { flex-direction: column; align-items: stretch; }
+  .meta-derecha { text-align: left; margin-top: 6px; }
+  .info-grid { grid-template-columns: 1fr 1fr; }
 }

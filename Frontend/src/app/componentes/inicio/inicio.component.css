@@ -1,5 +1,4 @@
-/* src/app/home/home.component.css */
-.home-wrap {
+.contenedor-inicio {
   max-width: 1100px;
   margin: 0 auto;
   padding: 28px 16px;
@@ -12,18 +11,18 @@
   text-align: center;
   margin-bottom: 32px;
 }
-.hero-title {
+.titulo-hero {
   color: var(--carmesí);
   font-size: 2rem;
   margin: 0 0 12px;
 }
-.hero-sub {
+.subtitulo-hero {
   color: #334155;
   max-width: 820px;
   margin: 0 auto 16px;
   font-size: 1.05rem;
 }
-.hero-ctas {
+.ctas-hero {
   display: flex;
   gap: 12px;
   justify-content: center;
@@ -45,7 +44,7 @@
 }
 .btn:hover { transform: translateY(-3px); }
 
-/* color variants */
+/* variantes de color */
 .btn-carmesí {
   background: var(--carmesí);
   color: white;
@@ -55,21 +54,21 @@
   color: #111827;
 }
 
-/* features */
-.features {
+/* características */
+.caracteristicas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
   margin-bottom: 28px;
 }
-.feature {
+.caracteristica {
   background: white;
   padding: 18px;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(15,23,42,0.05);
   text-align: center;
 }
-.feature-ico {
+.icono-caracteristica {
   width: 56px;
   height: 56px;
   margin: 0 auto 10px;
@@ -80,33 +79,33 @@
   border-radius: 999px;
   font-size: 22px;
 }
-.feature-title { color: var(--carmesí); margin: 0 0 8px; }
+.titulo-caracteristica { color: var(--carmesí); margin: 0 0 8px; }
 
-/* how it works */
-.howitworks {
+/* cómo funciona */
+.como-funciona {
   background: white;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 26px;
   box-shadow: 0 6px 18px rgba(2,6,23,0.04);
 }
-.how-grid {
+.cuadricula-funciona {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
 }
-.how-block h4 { color: var(--carmesí); margin-bottom: 8px; }
+.bloque-funciona h4 { color: var(--carmesí); margin-bottom: 8px; }
 
-/* CTA bar */
-.cta-bar {
+/* barra CTA */
+.barra-cta {
   background: linear-gradient(90deg, var(--carmesí) 0%, var(--albero) 100%);
   color: white;
   padding: 22px;
   border-radius: 12px;
   text-align: center;
 }
-.cta-buttons { display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
-.cta-white {
+.botones-cta { display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+.cta-blanco {
   background: white;
   color: var(--carmesí);
   border-radius: 8px;
@@ -121,21 +120,21 @@
   font-weight: 600;
 }
 
-/* responsive */
+/* responsivo */
 @media (max-width: 720px) {
-  .how-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 1.5rem; }
+  .cuadricula-funciona { grid-template-columns: 1fr; }
+  .titulo-hero { font-size: 1.5rem; }
 }
 
-/* ----- Overrides/UX polish solicitados ----- */
+/* ----- Ajustes/pulido UX solicitados ----- */
 
 /* Aseguramos el fondo local del contenedor (por si algún componente lo sobreescribió) */
-.home-wrap {
+.contenedor-inicio {
   background: transparent;
   color: var(--text-default);
 }
 
-/* CTA/Hero buttons: aseguramos texto en blanco y comportamiento hover (zoom) */
+/* Botones CTA/Hero: aseguramos texto en blanco y comportamiento hover (zoom) */
 .btn-carmesí {
   background: var(--carmesí);
   color: #ffffff;              /* texto blanco */
@@ -166,43 +165,42 @@
   display: inline-block;
 }
 
-/* Cajas / features - sombra exterior más visible y zoom on hover */
-.feature,
-.howitworks,
-.card,
+/* Cajas / características - sombra exterior más visible y zoom on hover */
+.caracteristica,
+.como-funciona,
+.tarjeta,
 .bg-white.rounded-xl,
 .bg-white.rounded-2xl {
   box-shadow: 0 18px 40px rgba(15,23,42,0.12); /* sombra más visible */
   transition: transform .18s ease, box-shadow .18s ease;
 }
 
-/* Zoom para las .feature al pasar el cursor */
-.feature {
+/* Zoom para las .caracteristica al pasar el cursor */
+.caracteristica {
   transform-origin: center;
 }
-.feature:hover {
+.caracteristica:hover {
   transform: translateY(-8px) scale(1.04);
   box-shadow: 0 28px 60px rgba(15,23,42,0.16);
 }
 
 /* Título "¿Cómo funciona?" centrado y color carmesí */
-.howitworks h2,
-.howitworks h2, /* por si hay variantes */
-.howitworks .title {
+.como-funciona h2,
+.como-funciona .titulo {
   text-align: center;
   color: var(--carmesí);
 }
 
 /* Icono en la cabecera de cada bloque (asegura que el icono contraste) */
-.feature-ico, .w-12.h-12 {
+.icono-caracteristica, .w-12.h-12 {
   color: #fff; /* icono blanco sobre el círculo coloreado */
 }
 
-/* Ajustes circulitos con numeros para los <ol> */
+/* Ajustes circulitos con números para los <ol> */
 /* Aplicamos círculo rojo al primer bloque (Ofertantes) y amarillo al segundo (Consumidores) */
-/* Estructura asumida: .howitworks > div:first-child, .howitworks > div:last-child */
-.howitworks > div:first-child ol li span,
-.howitworks ol:first-of-type li span {
+/* Estructura asumida: .como-funciona > div:first-child, .como-funciona > div:last-child */
+.como-funciona > div:first-child ol li span,
+.como-funciona ol:first-of-type li span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -216,8 +214,8 @@
   flex-shrink: 0;
 }
 
-.howitworks > div:last-child ol li span,
-.howitworks ol:last-of-type li span {
+.como-funciona > div:last-child ol li span,
+.como-funciona ol:last-of-type li span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -231,47 +229,47 @@
   flex-shrink: 0;
 }
 
-/* Aseguramos que los li tengan el icono/circulo y el texto alineado */
-.howitworks ol li {
+/* Aseguramos que los li tengan el icono/círculo y el texto alineado */
+.como-funciona ol li {
   display: flex;
   align-items: flex-start;
   gap: 12px;
 }
 
 /* CTA final: botones con lupa y efecto zoom; y texto de "Ver peticiones" en rojo */
-.cta-buttons .btn {
+.botones-cta .btn {
   transition: transform .14s ease, box-shadow .14s ease;
 }
-.cta-buttons .btn:hover {
+.botones-cta .btn:hover {
   transform: translateY(-4px) scale(1.04);
 }
-.cta-buttons .btn .lucide,
-.cta-buttons .btn svg {
+.botones-cta .btn .lucide,
+.botones-cta .btn svg {
   margin-right: 10px;
 }
 
 /* Si el botón de "Ver peticiones" usa la clase cta-albero, forzamos texto rojo */
-.cta-buttons .cta-albero,
-.cta-buttons .btn-cta-peticiones {
+.botones-cta .cta-albero,
+.botones-cta .btn-cta-peticiones {
   color: var(--carmesí) !important;
   background: var(--albero) !important; /* asegurar fondo amarillo */
   border: none;
 }
-.cta-buttons .cta-albero:hover,
-.cta-buttons .btn-cta-peticiones:hover {
+.botones-cta .cta-albero:hover,
+.botones-cta .btn-cta-peticiones:hover {
   filter: brightness(.98);
 }
 
 /* Asegurar legibilidad cuando haya texto blanco en botones oscuros */
-.btn-carmesí, .btn-albero, .cta-white {
+.btn-carmesí, .btn-albero, .cta-blanco {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Pequeño ajuste responsive */
+/* Pequeño ajuste responsivo */
 @media (max-width: 720px) {
-  .feature:hover { transform: none; } /* evitar zoom agresivo en móviles */
+  .caracteristica:hover { transform: none; } /* evita zoom agresivo en móviles */
   .btn { width: auto; }
 }

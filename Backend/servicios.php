@@ -31,38 +31,83 @@ if ($objeto == null) {
 }
 
 // --- autenticación mínima: leer Authorization Bearer token si viene ---
+// --- autenticación mínima: leer Authorization Bearer token si viene ---
+/*
+  Aquí intento recuperar un token Bearer enviado por el cliente en el
+  encabezado Authorization. Lo explico con mis acciones concretas:
+
+  1) Compruebo si la función apache_request_headers() existe y, si
+     existe, la uso porque devuelve los encabezados tal cual los
+     proporciona Apache (más fiable en algunos entornos).
+  2) Si esa función no existe, uso $_SERVER como alternativa.
+  3) Busco el encabezado Authorization en varias claves porque distintos
+     servidores / proxies lo exponen con nombres distintos.
+  4) Si encuentro un encabezado con el patrón "Bearer <token>" lo
+     extraigo y lo devuelvo; si no, devuelvo null.
+*/
+
 function getBearerToken() {
     $headers = null;
+
+    // Si estoy en un entorno Apache, prefiero apache_request_headers()
     if (function_exists('apache_request_headers')) {
+        // Obtengo todos los encabezados tal cual los envía el servidor
         $headers = apache_request_headers();
     } else {
+        // Fallback: uso la superglobal $_SERVER (útil en otros servidores)
         $headers = $_SERVER;
     }
-    $authHeader = null;
-    if (!empty($headers['Authorization'])) $authHeader = $headers['Authorization'];
-    elseif (!empty($headers['authorization'])) $authHeader = $headers['authorization'];
-    elseif (!empty($_SERVER['HTTP_AUTHORIZATION'])) $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
 
+    // Inicializo la variable que contendrá el valor del Authorization, si existe
+    $authHeader = null;
+
+    // Busco Authorization en varias formas — algunos entornos usan mayúsculas, otros no,
+    // y algunos pasan el header como HTTP_AUTHORIZATION en $_SERVER.
+    if (!empty($headers['Authorization'])) {
+        $authHeader = $headers['Authorization'];
+    } elseif (!empty($headers['authorization'])) {
+        $authHeader = $headers['authorization'];
+    } elseif (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+    }
+
+    // Si no hay encabezado Authorization, devuelvo null (no hay token)
     if (!$authHeader) return null;
+
+    // Extraigo token con expresión regular: busco "Bearer <token>" y devuelvo solo el token
     if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
         return $matches[1];
     }
+
+    // Si no encaja con el patrón Bearer, también devuelvo null
     return null;
 }
 
+
+// Inicializo la variable del usuario autenticado como null.
+// Más adelante, si tengo token, intento recuperar el usuario asociado.
 $authUser = null;
 $bearer = getBearerToken();
+
 if ($bearer) {
-    // buscar usuario por api_token
+    // Si obtuve un token, intento localizar en la BD el usuario que tenga ese api_token.
+    // En caso de cualquier error en la consulta, dejo $authUser en null y continúo,
+    // porque un fallo aquí no tiene que bloquear toda la API (logueo falso = acceso negado).
     try {
-        $stm = $modelo->pdo->prepare("SELECT id, email, rol, nombre, apellidos FROM usuarios WHERE api_token = ? LIMIT 1");
+        $stm = $modelo->pdo->prepare(
+            "SELECT id, email, rol, nombre, apellidos FROM usuarios WHERE api_token = ? LIMIT 1"
+        );
         $stm->execute(array($bearer));
+        // Si encuentro fila, la convierto en objeto; si no, mantengo null.
         $authUser = $stm->fetch(PDO::FETCH_OBJ) ?: null;
     } catch (Exception $e) {
-        // error al consultar (no fatal), dejar authUser = null
+        // Registro que hubo un error (podría enviar a error_log si quiero trazarlo),
+        // pero no lanzo excepción: dejo $authUser en null para que el flujo controle
+        // los endpoints como "no autenticado".
         $authUser = null;
     }
 }
+
 
 if (!$accion) {
     echo json_encode(["error" => "Acción no especificada"]);
@@ -123,7 +168,7 @@ switch ($accion) {
 		if (!$authUser) { print '{"result":"FAIL","error":"No autenticado"}'; break; }
 		if ($authUser->rol !== 'ofertante') { print '{"result":"FAIL","error":"No eres ofertante"}'; break; }
 
-		// forzamos que el usuario creador sea el authUser->id (evitar spoofing)
+		// forzamos que el usuario creador sea el authUser->id (evita suplantar identidad)
 		if (isset($objeto->oferta)) {
 			$objeto->oferta->usuario_id = $authUser->id;
 		}

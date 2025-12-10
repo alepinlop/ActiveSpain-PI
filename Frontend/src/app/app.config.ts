@@ -11,5 +11,7 @@ export const appConfig: ApplicationConfig = {
 
 // app.config.ts
 export const APP_CONFIG = {
-  API_URL: 'http://localhost/Ejercicios/ProyectoIntegrado/Backend/servicios.php'
+  API_URL: 'https://activespain.infinityfree.me/servicios.php'
+  // local
+  // API_URL: 'http://localhost/Ejercicios/ProyectoIntegrado/Backend/servicios.php'
 };

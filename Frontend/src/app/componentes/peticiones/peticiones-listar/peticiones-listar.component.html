@@ -1,13 +1,13 @@
-<div class="peticiones-wrap">
-  <div class="header">
+<div class="peticiones-contenedor">
+  <div class="encabezado">
     <div>
       <h2>Peticiones de Clientes</h2>
       <p class="sub">Descubre qué actividades están buscando los consumidores.</p>
     </div>
 
-    @if (currentUser && currentUser.rol === 'consumidor') {
-      <div class="actions">
-        <button class="btn-crear" type="button" (click)="toggleCrear()">
+    @if (usuarioActual && usuarioActual.rol === 'consumidor') {
+      <div class="acciones">
+        <button class="btn-crear" type="button" (click)="alternarCrear()">
           {{ mostrarCrear ? 'Cancelar' : 'Crear nueva petición' }}
         </button>
       </div>
@@ -15,8 +15,8 @@
   </div>
 
   @if (mostrarCrear) {
-    <div class="crear-wrapper">
-      <app-peticiones-crear (created)="onCreated()" (cancel)="mostrarCrear=false"></app-peticiones-crear>
+    <div class="crear-contenedor">
+      <app-peticiones-crear (created)="alCreado()" (cancel)="mostrarCrear=false"></app-peticiones-crear>
     </div>
   }
 
@@ -24,28 +24,28 @@
   @if (error) { <div class="error">{{ error }}</div> }
 
   @if (!cargando && peticiones.length > 0) {
-    <div class="peticiones-grid">
+    <div class="grid-peticiones">
       @for (p of peticiones; track p.id) {
-        <article class="peticion-card" role="article" [attr.aria-labelledby]="'peticion-' + p.id">
-          <header class="card-top">
-            <div class="card-titulo">
+        <article class="tarjeta-peticion" role="article" [attr.aria-labelledby]="'peticion-' + p.id">
+          <header class="cabezal-tarjeta">
+            <div class="titulo-tarjeta">
               <h3 id="peticion-{{p.id}}" class="titulo">{{ p.titulo || '—' }}</h3>
               <span class="badge tipo">{{ p.actividad_tipo || '-' }}</span>
             </div>
-            <div class="meta-right">
+            <div class="meta-derecha">
               <div class="meta-line"><strong>ID:</strong> {{ p.id }}</div>
               <div class="meta-line"><strong>Estado:</strong> <span class="estado">{{ p.estado || '—' }}</span></div>
             </div>
           </header>
 
-          <section class="card-body">
+          <section class="cuerpo-tarjeta">
             <p class="descripcion">{{ p.descripcion || '-' }}</p>
 
-            <div class="grid-info">
-              <div class="info-row"><strong>Consumidor:</strong><span>{{ ownerName(p) }}</span></div>
+            <div class="info-grid">
+              <div class="info-row"><strong>Consumidor:</strong><span>{{ nombreSolicitante(p) }}</span></div>
               <div class="info-row"><strong>Lugar:</strong><span>{{ p.lugar_ciudad || '-' }}</span></div>
               <div class="info-row"><strong>Fecha/Hora:</strong><span>{{ p.fechahora_deseada || '-' }}</span></div>
-              <div class="info-row"><strong>Duración:</strong><span>{{ formatDuracion(p.duracion_horas) }}</span></div>
+              <div class="info-row"><strong>Duración:</strong><span>{{ formatearDuracion(p.duracion_horas) }}</span></div>
               <div class="info-row"><strong>Necesidades:</strong><span>{{ p.necesidades_concretas || '-' }}</span></div>
               <div class="info-row"><strong>Presupuesto:</strong>
                 <span>
@@ -59,15 +59,15 @@
             </div>
           </section>
 
-          <footer class="card-actions">
-            <div class="contact-info">
-              <span class="small"><strong>Usuario:</strong> {{ ownerName(p) }}</span>
+          <footer class="acciones-tarjeta">
+            <div class="contacto-info">
+              <span class="small"><strong>Usuario:</strong> {{ nombreSolicitante(p) }}</span>
             </div>
 
-            <div class="accion-botones">
-              @if (isOwner(p)) {
-                <button class="btn-editar" (click)="startEdit(p)">Editar</button>
-                <button class="btn-borrar" (click)="startDelete(p.id)">Borrar</button>
+            <div class="botones-accion">
+              @if (esPropietario(p)) {
+                <button class="btn-editar" (click)="iniciarEdicion(p)">Editar</button>
+                <button class="btn-borrar" (click)="iniciarBorrado(p.id)">Borrar</button>
               } @else {
                 <span class="not-owner">—</span>
               }
@@ -75,12 +75,12 @@
           </footer>
 
           <!-- Renderizar inline el componente de borrado justo debajo de la tarjeta -->
-          @if (deletingId === p.id) {
-            <div class="inline-borrar">
+          @if (idBorrando === p.id) {
+            <div class="borrado-inline">
               <app-peticiones-borrar
                 [id]="p.id"
-                (deleted)="onDeleted()"
-                (cancel)="deletingId = null">
+                (deleted)="alBorrado()"
+                (cancel)="idBorrando = null">
               </app-peticiones-borrar>
             </div>
           }
@@ -89,13 +89,13 @@
     </div>
 
     <!-- MODAL de edición (overlay) -->
-    @if (editing) {
-      <div class="modal-backdrop" (click)="editing = null">
+    @if (editando) {
+      <div class="modal-backdrop" (click)="editando = null">
         <div class="modal-window" (click)="$event.stopPropagation()">
           <app-peticiones-actualizar
-            [peticion]="editing"
-            (updated)="onUpdated()"
-            (cancel)="editing = null">
+            [peticion]="editando"
+            (updated)="alActualizado()"
+            (cancel)="editando = null">
           </app-peticiones-actualizar>
         </div>
       </div>

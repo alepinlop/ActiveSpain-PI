@@ -1,51 +1,50 @@
-<!-- src/app/home/home.component.html -->
-<div class="home-wrap">
+<div class="contenedor-inicio">
   <section class="hero">
-    <h1 class="hero-title">Conectamos aventura con aventureros</h1>
-    <p class="hero-sub">
+    <h1 class="titulo-hero">Conectamos aventura con aventureros</h1>
+    <p class="subtitulo-hero">
       La plataforma que une a guías, empresas de ocio y particulares con personas que buscan
       experiencias únicas de aventura, senderismo, yincanas y mucho más por toda España.
     </p>
 
-    <div class="hero-ctas">
-      <button class="btn btn-carmesí" (click)="goTo('ofertas')">
-        <!-- icon simplificado -->
-        <span class="btn-icon">🎒</span>
-        Ver Ofertas de Actividades
+    <div class="ctas-hero">
+      <button class="btn btn-carmesí" (click)="irA('ofertas')">
+        <!-- icono simplificado -->
+        <span class="icono-btn">💼</span>
+        Ver Ofertantes de Actividades
       </button>
 
-      <button class="btn btn-albero" (click)="goTo('peticiones')">
-        <span class="btn-icon">👥</span>
-        Ver Peticiones de Clientes
+      <button class="btn btn-albero" (click)="irA('peticiones')">
+        <span class="icono-btn">🏷️</span>
+        Ver Consumidores de Actividades
       </button>
     </div>
   </section>
 
-  <section class="features">
-    <div class="feature">
-      <div class="feature-ico">📍</div>
-      <h3 class="feature-title">Búsqueda Geolocalizada</h3>
+  <section class="caracteristicas">
+    <div class="caracteristica">
+      <div class="icono-caracteristica">📍</div>
+      <h3 class="titulo-caracteristica">Búsqueda Geolocalizada</h3>
       <p>Encuentra actividades y clientes cerca de ti. Filtra por ubicación y descubre oportunidades en tu zona.</p>
     </div>
 
-    <div class="feature">
-      <div class="feature-ico">📅</div>
-      <h3 class="feature-title">Gestión Sencilla</h3>
+    <div class="caracteristica">
+      <div class="icono-caracteristica">📅</div>
+      <h3 class="titulo-caracteristica">Gestión Sencilla</h3>
       <p>Publica tus actividades o peticiones en minutos. Actualiza, modifica o elimina tus anuncios cuando quieras.</p>
     </div>
 
-    <div class="feature">
-      <div class="feature-ico">⭐</div>
-      <h3 class="feature-title">Contacto Directo</h3>
+    <div class="caracteristica">
+      <div class="icono-caracteristica">☎️</div>
+      <h3 class="titulo-caracteristica">Contacto Directo</h3>
       <p>Conecta directamente con ofertantes o consumidores. Sin intermediarios, tú decides cómo gestionar tus reservas.</p>
     </div>
   </section>
 
-  <section class="howitworks">
+  <section class="como-funciona">
     <h2>¿Cómo funciona?</h2>
 
-    <div class="how-grid">
-      <div class="how-block">
+    <div class="cuadricula-funciona">
+      <div class="bloque-funciona">
         <h4>Para Ofertantes</h4>
         <ol>
           <li><strong>1. Publica tu actividad:</strong> Crea una oferta con todos los detalles.</li>
@@ -54,7 +53,7 @@
         </ol>
       </div>
 
-      <div class="how-block">
+      <div class="bloque-funciona">
         <h4>Para Consumidores</h4>
         <ol>
           <li><strong>1. Busca actividades:</strong> Explora por tipo, ubicación y precio.</li>
@@ -65,13 +64,13 @@
     </div>
   </section>
 
-  <section class="cta-bar">
+  <section class="barra-cta">
     <h3>¿Listo para empezar?</h3>
     <p>Únete a la comunidad de aventureros y descubre o comparte experiencias únicas.</p>
 
-    <div class="cta-buttons">
-      <button class="cta-white" (click)="goTo('ofertas')">Explorar Ofertas</button>
-      <button class="cta-albero" (click)="goTo('peticiones')">Ver Peticiones</button>
+    <div class="botones-cta">
+      <button class="cta-blanco" (click)="irA('ofertas')">Explorar Ofertas</button>
+      <button class="cta-albero" (click)="irA('peticiones')">Ver Peticiones</button>
     </div>
   </section>
 </div>
